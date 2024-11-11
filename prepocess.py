@@ -9,21 +9,20 @@ filename = "data/xml_mxl/canon_in_d.mxl"
 # Get musical data from a MIDI file
 def get_musical_data(filename: str):
     #pasrce the midi data for sarate melody and accompaniment parts
-    midi_data = converter.parser(filename)
-    
-    #get melody part, compress into single voice    
-    pass
+    score = converter.parse(filename)
 
-def extract(stream:object, obj_to_extract:object) -> List[object]:
-    notes =[]
+    #get melody part, compress into single voice
+    melody_voice = get_element_by_class(score, stream.Voice)
+    return melody_voice
+
+
+def get_element_by_class(stream:object, obj_to_extract:object) -> List[object]:
+    elements =[]
     for elem in stream.recurse():
         if isinstance(elem, obj_to_extract):
-            notes.append(elem)
-    return notes 
+            elements.append(elem)
+    return elements
 
 
-
-midi_data = converter.parse(filename)
-notes = extract(midi_data, stream.Voice)
-for note in notes:
-    print(note.pitch)
+m = get_musical_data(filename)
+m.show()
